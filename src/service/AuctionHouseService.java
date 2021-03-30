@@ -39,14 +39,14 @@ public class AuctionHouseService {
     public boolean placeBid(Auction auction, User User, int price){
         if(auction.getHighestBid().getPrice() < price ){
             // remove auction from current highestBid holder
-            ArrayList<Auction> oldBidderAuctions = auction.getHighestBid().getBidder().getActiveAuctions();
+            ArrayList<Auction> oldBidderAuctions = new ArrayList<>(auction.getHighestBid().getBidder().getActiveAuctions());
             oldBidderAuctions.remove(auction);
             auction.getHighestBid().getBidder().setActiveAuctions(oldBidderAuctions);
 
             // place bid
             auction.setHighestBid( new Bid(User, price)  );
             // update User's active auctions
-            ArrayList<Auction> UserActiveAuctions = User.getActiveAuctions();
+            ArrayList<Auction> UserActiveAuctions = new ArrayList<>(User.getActiveAuctions());
             if(!UserActiveAuctions.contains(auction)) {
                 UserActiveAuctions.add(auction);
                 User.setActiveAuctions(UserActiveAuctions);
@@ -78,13 +78,13 @@ public class AuctionHouseService {
         activeAuctions.add(0, auction);
 
         if(!owner.getAuctionedItems().contains(product)){
-            ArrayList<Product> ownerProducts = owner.getAuctionedItems();
+            ArrayList<Product> ownerProducts = new ArrayList<>(owner.getAuctionedItems());
             ownerProducts.add(product);
             owner.setAuctionedItems( ownerProducts );
 
-            ArrayList<Auction> ownerAuctions = owner.getActiveSellAuctions();
+            ArrayList<Auction> ownerAuctions = new ArrayList<>(owner.getActiveSellAuctions());
             ownerAuctions.add(auction);
-            owner.setActiveAuctions(ownerAuctions);
+            owner.setActiveSellAuctions(ownerAuctions);
         }
         else{
             System.out.println("Product is already in auction");
@@ -102,30 +102,30 @@ public class AuctionHouseService {
             this.endedAuctions.add(auction);
 
             // update owner's active and sold products
-            ArrayList<Product> ownerAuctionItems = owner.getAuctionedItems();
+            ArrayList<Product> ownerAuctionItems = new ArrayList<>(owner.getAuctionedItems());
             ownerAuctionItems.remove(auction.getProduct());
             owner.setAuctionedItems(ownerAuctionItems);
 
-            ArrayList<Product> ownerSoldItems = owner.getSoldItems();
+            ArrayList<Product> ownerSoldItems = new ArrayList<>(owner.getSoldItems());
             ownerSoldItems.add(auction.getProduct());
             owner.setSoldItems(ownerSoldItems);
 
             // update owner's active and ended auctions
-            ArrayList<Auction> ownerActiveAuctions = owner.getActiveSellAuctions();
+            ArrayList<Auction> ownerActiveAuctions = new ArrayList<>(owner.getActiveSellAuctions());
             ownerActiveAuctions.remove(auction);
             owner.setActiveSellAuctions(ownerActiveAuctions);
 
-            ArrayList<Auction> ownerEndedAuctions = owner.getEndedSellAuctions();
+            ArrayList<Auction> ownerEndedAuctions = new ArrayList<>(owner.getEndedSellAuctions());
             ownerEndedAuctions.add(auction);
             owner.setEndedSellAuctions(ownerEndedAuctions);
 
 
             // update Users active and won auctions
-            ArrayList<Auction> userActiveActions = auction.getHighestBid().getBidder().getActiveAuctions();
+            ArrayList<Auction> userActiveActions = new ArrayList<>(auction.getHighestBid().getBidder().getActiveAuctions());
             userActiveActions.remove(auction);
             auction.getHighestBid().getBidder().setActiveAuctions(userActiveActions);
 
-            ArrayList<Auction> userWonAuctions = auction.getHighestBid().getBidder().getAuctionsWon();
+            ArrayList<Auction> userWonAuctions = new ArrayList<>(auction.getHighestBid().getBidder().getAuctionsWon());
             userWonAuctions.add(auction);
             userWonAuctions.sort(Comparator.comparingDouble(o -> o.getHighestBid().getPrice()));
             auction.getHighestBid().getBidder().setAuctionsWon(userWonAuctions);
@@ -137,7 +137,7 @@ public class AuctionHouseService {
     }
 
     public ArrayList<ArrayList<Object>> getMostExpensiveProductsSold(){
-        ArrayList<Auction> sortedAuctions = endedAuctions;
+        ArrayList<Auction> sortedAuctions = new ArrayList<>(endedAuctions);
         sortedAuctions.sort(Comparator.comparingDouble(o -> o.getHighestBid().getPrice()) );
         ArrayList<ArrayList<Object>> pairList = new ArrayList<ArrayList<Object>>();
 
@@ -150,9 +150,14 @@ public class AuctionHouseService {
         return pairList;
     }
 
-    public ArrayList<Auction> getUserAuctionsByBid(User user){
-        ArrayList<Auction> auctions = user.getActiveAuctions();
+    public ArrayList<Auction> getUserActiveAuctions(User user){
+        ArrayList<Auction> auctions = new ArrayList<>(user.getActiveAuctions());
         auctions.sort(Comparator.comparingDouble(o -> o.getHighestBid().getPrice()));
+        return auctions;
+    }
+
+    public ArrayList<Auction> getUserSellActiveAuctions(User user){
+        ArrayList<Auction> auctions = new ArrayList<>(user.getActiveSellAuctions());
         return auctions;
     }
 
@@ -178,7 +183,8 @@ public class AuctionHouseService {
     }
 
     public ArrayList<User> getUsers(){
-        return users;
+        ArrayList<User> usrs = new ArrayList<>(users);
+        return usrs;
     }
 
 }
