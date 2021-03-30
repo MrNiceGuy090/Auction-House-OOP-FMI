@@ -79,8 +79,6 @@ public class Application {
                 if(exit) break;
             }
 
-            System.out.println(activeUser.getId());
-
             System.out.println("Please tell us what are you interested in!\n1.Buy\n2.Sell\n3.Just looking around\n4.Change user");
             String line = scanner.nextLine();
             switch(line) {
