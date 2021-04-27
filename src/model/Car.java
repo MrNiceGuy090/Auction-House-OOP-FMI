@@ -14,6 +14,13 @@ public class Car extends Product{
         this.engine = engine;
     }
 
+    public Car(String id, String name, String brand, int builtDate, int nrOfSeats, boolean isAutomatic, Engine engine){
+        super(id, name, brand, builtDate);
+        this.nrOfSeats = nrOfSeats;
+        this.isAutomatic = isAutomatic;
+        this.engine = engine;
+    }
+
     public int getNrOfSeats() {
         return nrOfSeats;
     }

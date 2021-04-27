@@ -3,17 +3,26 @@ package main;
 import model.*;
 import service.*;
 
-
+import java.io.*;
 import java.util.ArrayList;
 import java.util.*;
 
 public class Application {
-    public static void main(String[] args){
-        AuctionHouseService auctionService = new AuctionHouseService();
+    public static void main(String[] args) throws IOException {
+        AuctionHouseService auctionService = AuctionHouseService.getInstance();
+        ProductService productService = ProductService.getInstance();
+        UserService userService = UserService.getInstance();
+        BidService bidService = BidService.getInstance();
+
         Scanner scanner = new Scanner(System.in);
 
         boolean needUser = true;
         User activeUser = null;
+        // read files
+        productService.readProducts();
+        userService.readUsers();
+        bidService.readBids();
+        auctionService.readAuctions(productService.getProducts(), bidService.getBids(), userService.getUsers());
 
         while(true) {
             boolean breakVar = false;
@@ -28,7 +37,7 @@ public class Application {
                         System.out.println("Password");
                         String password = scanner.nextLine();
 
-                        while( (activeUser = auctionService.logInUser(name, password)) == null ){
+                        while( (activeUser = userService.logInUser(name, password)) == null ){
                             System.out.println("Name and password do not match. Want to try again?(Yes/No)");
                             String cont = scanner.nextLine();
                             if (cont.equals("No")) {breakVar = true; break; }
@@ -44,14 +53,14 @@ public class Application {
                         System.out.println("Password");
                         password = scanner.nextLine();
 
-                        while( !auctionService.addUser(name, password) ){
+                        while( !userService.addUser(name, password) ){
                             System.out.println("The name is already in use. Please choose another!");
                             System.out.println("Name: ");
                             name = scanner.nextLine();
                             System.out.println("Password");
                             password = scanner.nextLine();
                         }
-                        activeUser = auctionService.logInUser(name, password);
+                        activeUser = userService.logInUser(name, password);
                         break;
                     case("3"):
                         return;
@@ -61,7 +70,7 @@ public class Application {
             if(breakVar) { needUser=true; continue;}
 
             if( activeUser.getName().equals("Admin")){
-                ArrayList<User> users = new ArrayList<>(auctionService.getUsers());
+                List<User> users = new ArrayList<>(userService.getUsers());
                 int order = 1;
                 for (User user: users){
                     System.out.println(String.valueOf(order) + ": Name: " + user.getName() + "; ID: " + user.getId() + "; Status: " + (user.isBannend() ? "Banned" : "Not banned") );
@@ -93,7 +102,7 @@ public class Application {
                             System.out.println("Sort (can choose between price and year, or none): ");
                             String sorter = scanner.nextLine();
 
-                            ArrayList<Auction> auctions = new ArrayList<>(auctionService.getAuctions(filter, sorter));
+                            List<Auction> auctions = new ArrayList<>(auctionService.getAuctions(filter, sorter));
                             int order = 1;
                             for (Auction auction : auctions) {
                                 System.out.println(String.valueOf(order) + ": Name: " + auction.getProduct().getName() + "\tHighest bid:" + String.valueOf(auction.getHighestBid().getPrice()) );
@@ -144,7 +153,7 @@ public class Application {
                                     System.out.println("Enter the sum you want to bid(it has to be greater than " + String.valueOf(auction.getHighestBid().getPrice())
                                             + "):");
                                     int sum = Integer.parseInt(scanner.nextLine());
-                                    while (auctionService.placeBid(auction, activeUser, sum) == false) {
+                                    while (bidService.placeBid(auction, activeUser, sum) == false) {
                                         System.out.println("The bid is too low. Please type a sum greater than " + String.valueOf(auction.getHighestBid().getPrice()) +
                                                 "\nPlease type another sum: ");
                                         sum = Integer.parseInt(scanner.nextLine());
@@ -159,7 +168,7 @@ public class Application {
                                     continue;
                             }
                         case("2"):
-                            ArrayList<Auction> userActiveAuctions = new ArrayList<>(auctionService.getUserActiveAuctions(activeUser));
+                            List<Auction> userActiveAuctions = new ArrayList<>(auctionService.getUserActiveAuctions(activeUser));
                             for(Auction auct: userActiveAuctions){
                                 System.out.println(auct.getProduct().getName() + " " + String.valueOf(auct.getHighestBid().getPrice()));
                             }
@@ -285,7 +294,7 @@ public class Application {
                                     break;
 
                                 case("2"):
-                                    ArrayList<Auction> userAuctions = new ArrayList<>(auctionService.getUserSellActiveAuctions(activeUser));
+                                    List<Auction> userAuctions = new ArrayList<>(auctionService.getUserActiveSellAuctions(activeUser));
                                     int order = 1;
                                     for(Auction auct : userAuctions){
                                         System.out.println(String.valueOf(order) + ": " + auct.getProduct().getName() + " " + String.valueOf(auct.getHighestBid().getPrice()) );
@@ -308,8 +317,8 @@ public class Application {
                     opt = scanner.nextLine();
                     switch(opt){
                         case("1"):
-                            ArrayList<ArrayList<Object>> auctWinners = auctionService.getAuctionWinners();
-                            for (ArrayList<Object> pair: auctWinners){
+                            List<List<Object>> auctWinners = auctionService.getAuctionWinners();
+                            for (List<Object> pair: auctWinners){
                                 Auction auct = (Auction)pair.get(0);
                                 User winner = (User)pair.get(1);
                                 System.out.println("Product name: " + auct.getProduct().getName() + "; Winner name: " + winner.getName() +
@@ -317,8 +326,8 @@ public class Application {
                             }
                             break;
                         case("2"):
-                            ArrayList<ArrayList<Object>> sortedAuctions = auctionService.getMostExpensiveProductsSold();
-                            for (ArrayList<Object> pair: sortedAuctions) {
+                            List<List<Object>> sortedAuctions = auctionService.getMostExpensiveProductsSold();
+                            for (List<Object> pair: sortedAuctions) {
                                 Product prod = (Product) pair.get(0);
                                 double price = (Double) pair.get(1);
                                 System.out.println("Product name: " + prod.getName() +

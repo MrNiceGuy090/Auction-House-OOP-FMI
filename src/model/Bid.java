@@ -1,14 +1,22 @@
 package model;
 
+import service.UserService;
+
 import java.util.UUID;
 
 public class Bid implements Comparable<Bid>{
+
     private User bidder;
     private double price;
     private String id;
 
     public Bid(User bidder, double price){
         this.id = UUID.randomUUID().toString();
+        this.bidder = bidder;
+        this.price = price;
+    }
+    public Bid(String id, User bidder, double price){
+        this.id = id;
         this.bidder = bidder;
         this.price = price;
     }

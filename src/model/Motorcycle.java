@@ -18,6 +18,11 @@ public class Motorcycle extends Product{
         this.category = category;
         this.engine = engine;
     }
+    public Motorcycle(String id, String name, String brand, int builtDate,Category category, Engine engine){
+        super(id, name, brand, builtDate);
+        this.category = category;
+        this.engine = engine;
+    }
 
 
     public Category getCategory() {

@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class User{
@@ -8,15 +9,27 @@ public class User{
     private String name;
     private String password;
     private boolean isBannend;
-    private ArrayList<Product> auctionedItems;
-    private ArrayList<Product> soldItems;
-    private ArrayList<Auction> activeAuctions;
-    private ArrayList<Auction> auctionsWon; // sorted
-    private ArrayList<Auction> activeSellAuctions;
-    private ArrayList<Auction> endedSellAuctions;
+    private List<Product> auctionedItems;
+    private List<Product> soldItems;
+    private List<Auction> activeAuctions;
+    private List<Auction> auctionsWon; // sorted
+    private List<Auction> activeSellAuctions;
+    private List<Auction> endedSellAuctions;
 
     public User(String name, String password){
-        this.id = UUID.randomUUID().toString();;
+        this.id = UUID.randomUUID().toString();
+        this.name = name;
+        this.password = password;
+        this.isBannend = false;
+        this.auctionedItems =  new ArrayList<Product>();
+        this.soldItems = new ArrayList<Product>();
+        this.activeAuctions =  new ArrayList<Auction>();
+        this.auctionsWon = new ArrayList<>();
+        this.activeSellAuctions = new ArrayList<>();
+        this.endedSellAuctions = new ArrayList<>();
+    }
+    public User(String id, String name, String password){
+        this.id = id;
         this.name = name;
         this.password = password;
         this.isBannend = false;
@@ -52,35 +65,35 @@ public class User{
         isBannend = bannend;
     }
 
-    public ArrayList<Product> getAuctionedItems() {
+    public List<Product> getAuctionedItems() {
         return auctionedItems;
     }
 
-    public void setAuctionedItems(ArrayList<Product> auctionedItems) {
+    public void setAuctionedItems(List<Product> auctionedItems) {
         this.auctionedItems = auctionedItems;
     }
 
-    public ArrayList<Product> getSoldItems() {
+    public List<Product> getSoldItems() {
         return soldItems;
     }
 
-    public void setSoldItems(ArrayList<Product> soldItems) {
+    public void setSoldItems(List<Product> soldItems) {
         this.soldItems = soldItems;
     }
 
-    public ArrayList<Auction> getActiveAuctions() {
+    public List<Auction> getActiveAuctions() {
         return activeAuctions;
     }
 
-    public void setActiveAuctions(ArrayList<Auction> activeAuctions) {
+    public void setActiveAuctions(List<Auction> activeAuctions) {
         this.activeAuctions = activeAuctions;
     }
 
-    public ArrayList<Auction> getAuctionsWon() {
+    public List<Auction> getAuctionsWon() {
         return auctionsWon;
     }
 
-    public void setAuctionsWon(ArrayList<Auction> auctionsWon) {
+    public void setAuctionsWon(List<Auction> auctionsWon) {
         this.auctionsWon = auctionsWon;
     }
 
@@ -92,19 +105,19 @@ public class User{
         this.password = password;
     }
 
-    public ArrayList<Auction> getActiveSellAuctions() {
+    public List<Auction> getActiveSellAuctions() {
         return activeSellAuctions;
     }
 
-    public void setActiveSellAuctions(ArrayList<Auction> activeSellAuctions) {
+    public void setActiveSellAuctions(List<Auction> activeSellAuctions) {
         this.activeSellAuctions = activeSellAuctions;
     }
 
-    public ArrayList<Auction> getEndedSellAuctions() {
+    public List<Auction> getEndedSellAuctions() {
         return endedSellAuctions;
     }
 
-    public void setEndedSellAuctions(ArrayList<Auction> endedSellAuctions) {
+    public void setEndedSellAuctions(List<Auction> endedSellAuctions) {
         this.endedSellAuctions = endedSellAuctions;
     }
 }

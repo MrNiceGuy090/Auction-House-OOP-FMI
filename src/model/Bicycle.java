@@ -17,6 +17,10 @@ public class Bicycle extends Product{
         super(name, brand, builtDate);
         this.type = type;
     }
+    public Bicycle(String id,String name, String brand, int builtDate,Type type){
+        super(id, name, brand, builtDate);
+        this.type = type;
+    }
 
     public Type getType() {
         return type;

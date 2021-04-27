@@ -14,6 +14,13 @@ public class Auction {
         this.owner = owner;
     }
 
+    public Auction(String id, Product product, User owner, double startingPrice){
+        this.id = id;
+        this.product = product;
+        this.highestBid = new Bid(owner, startingPrice);
+        this.owner = owner;
+    }
+
     public Product getProduct() {
         return product;
     }

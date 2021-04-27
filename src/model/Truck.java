@@ -13,6 +13,12 @@ public class Truck extends Product {
         this.noOfWheels = noOfWheels;
         this.engine = engine;
     }
+    public Truck(String id, String name, String brand, int builtDate, long capacity, int noOfWheels, Engine engine){
+        super(id,name, brand, builtDate);
+        this.capacity = capacity;
+        this.noOfWheels = noOfWheels;
+        this.engine = engine;
+    }
 
     public long getCapacity() {
         return capacity;

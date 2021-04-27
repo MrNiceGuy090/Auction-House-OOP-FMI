@@ -10,7 +10,13 @@ public abstract class Product implements Comparable<Product> {
     protected int builtDate;
 
     public Product(String name, String brand, int builtDate) {
-        this.id = UUID.randomUUID().toString();;
+        this.id = UUID.randomUUID().toString();
+        this.name = name;
+        this.brand = brand;
+        this.builtDate = builtDate;
+    }
+    public Product(String id, String name, String brand, int builtDate) {
+        this.id = id;
         this.name = name;
         this.brand = brand;
         this.builtDate = builtDate;
