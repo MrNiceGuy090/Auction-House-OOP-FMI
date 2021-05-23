@@ -15,6 +15,13 @@ public class Engine {
         this.capacity = capacity;
     }
 
+    public Engine(String id, int horsePower, boolean isElectric, double capacity){
+        this.id = id;
+        this.horsePower = horsePower;
+        this.isElectric = isElectric;
+        this.capacity = capacity;
+    }
+
     public int getHorsePower() {
         return horsePower;
     }
@@ -37,5 +44,9 @@ public class Engine {
 
     public void setCapacity(double capacity) {
         this.capacity = capacity;
+    }
+
+    public String getId() {
+        return id;
     }
 }

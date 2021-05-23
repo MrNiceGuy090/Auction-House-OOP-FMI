@@ -1,13 +1,18 @@
 package service;
 import model.*;
 
+import repository.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class ProductService {
     private static ProductService instance = null;
     private List<Product> products;
-
+    private CarRepository  carRepository = new CarRepository();
+    private TruckRepository  truckRepository = new TruckRepository();
+    private MotorcycleRepository  motorcycleRepository = new MotorcycleRepository();
+    private BicycleRepository  bicycleRepository = new BicycleRepository();
     private ProductService(){
         products = new ArrayList<Product>();
     }
@@ -90,6 +95,7 @@ public class ProductService {
     }
 
     public void readProducts(){
+
         ReaderService reader = ReaderService.getInstance();
         String text = reader.readFile("src\\files\\Products.csv");
         String[] lines = text.split("\n");
@@ -104,18 +110,22 @@ public class ProductService {
             if (data[4].equals("Car")){
                 Car car = this.buildCar(data[0], data[1], data[2],Integer.parseInt(data[3]),Integer.parseInt(data[5]), Boolean.getBoolean(data[6]), Integer.parseInt(data[7]),Boolean.getBoolean(data[9]),Double.parseDouble(data[8])  );
                 products.add(car);
+                carRepository.addCar(car);
             }
             else if (data[4].equals("Truck")){
                 Truck truck = this.buildTruck(data[0], data[1], data[2], Integer.parseInt(data[3]),Integer.parseInt(data[5]), Integer.parseInt(data[6]),Integer.parseInt(data[7]),Boolean.getBoolean(data[9]),Double.parseDouble(data[8]));
                 products.add(truck);
+                truckRepository.addTruck(truck);
             }
             else if (data[4].equals("Motorcycle")){
                 Motorcycle moto = this.buildMotorcycle(data[0],data[1], data[2],Integer.parseInt(data[3]), data[5],Integer.parseInt(data[6]),Boolean.getBoolean(data[8]),Double.parseDouble(data[7]) );
                  products.add(moto);
+                 motorcycleRepository.addMotorcycle(moto);
             }
             else if (data[4].equals("Bicycle")){
                 Bicycle bike =  this.buildBicycle(data[0], data[1], data[2],Integer.parseInt(data[3]), data[5] );
                 products.add(bike);
+                bicycleRepository.addBicycle(bike);
             }
         }
     }

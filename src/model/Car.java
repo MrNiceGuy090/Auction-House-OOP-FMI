@@ -1,6 +1,5 @@
 package model;
 
-import java.util.Date;
 
 public class Car extends Product{
     private int nrOfSeats;
